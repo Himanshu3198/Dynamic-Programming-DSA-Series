@@ -1,86 +1,34 @@
-//#include<bits/stdc++.h>
-//using namespace std;
-// int main()
-// {
-// 	int coins[]={1,2,3};
-// 	int n=sizeof(coins)/sizeof(coins[0]);
-// 	int max=4;
-// 	int table
-// }
-// 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- #include <bits/stdc++.h>
-
+#include<bits/stdc++.h>
 using namespace std;
 
-long getWays(long amount, vector < long > coins)
-{
- long size = coins.size();
- long i,j, noofways[size+1][amount+1];
- 
- 
- for( j=0;j<amount+1;j++)
- {
- noofways[0][j] = 0;
- }
- for( i=0;i<size+1;i++)
- {
- noofways[i][0] = 1;
- }
- for(i =1 ;i<size+1;i++)
- {
- for( j=1;j<amount+1;j++)
- {
- if(coins[i-1]<=j)
- {
- noofways[i][j] = noofways[i-1][j] + noofways[i][j-coins[i-1]];
- 
- }
- else
- noofways[i][j] = noofways[i-1][j];
- }
- }
- //matrix
- 
- for(i=0;i<size+1;i++)
- {
- for(j=0;j<amount+1;j++)
- {
- cout<<noofways[i][j]<<" ";
- }
- cout<<endl;
- }
- 
- cout<<endl;
- cout<<size<<" "<<amount<<endl;
- 
- return noofways[size][amount];
- 
- 
+int CoinChange(int arr[],int n,int sum){
+    int c[sum][n];
+    for(int i=0;i<n;i++)
+    {
+         c[0][i]=1;
+    }
+       
+
+        for(int i=1;i<sum+1;i++){
+            for(int j=0;j<n;j++){
+                int x=(i-arr[j]>=0)?c[i-arr[j]][j]:0;
+               int  y=(j>=1)?c[i][j-1]:0;
+               c[i][j]=x+y;
+            }
+        }
+        return c[sum][n-1];
+
 }
 
-int main() {
- int n;
- int m;
- cin >> n >> m;
- vector<long> c(m);
- for(int c_i = 0; c_i < m; c_i++){
- cin >> c[c_i];
- }
- // Print the number of ways of making change for 'n' units using coins having the values given by 'c'
- long ways = getWays(n, c);
- cout<<ways;
- return 0;
+int main(){
+
+    int arr[]={1,2,3};
+    int n=sizeof(arr)/sizeof(arr[0]);
+    int sum=4;
+    cout<<CoinChange(arr,n,sum)<<"\n";
 }
+
+
+
+
+
