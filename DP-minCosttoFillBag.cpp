@@ -1,41 +1,97 @@
 // Minimum cost to fill given weight in a bag  gfg||leetcode
-#include<bits/stdc++.h>
-using namespace std ;
-#define bigNum 1000000
-vector< vector<int> > dp(1005,vector<int>(1005));
+#include <bits/stdc++.h>
+using namespace std;
 
-int val(int i , int w){
-	if(i>=1 && w>= 0)
-		return dp[i][w];
-	else 
-		return bigNum;
-}
+ // } Driver Code Ends
+#include <bits/stdc++.h>
+using namespace std;
 
-int main(){
-	int t , n , w , ans ;
-	cin>>t;
+class Solution{
+	public:
+int minimumCost(int cost[], int N, int W) 
+	{ 
 
-	while(t--){
-		cin>>n>>w;
-		vector<int> cost(n+1);
-		for(int i=1;i<=n;i++)
-			cin>>cost[i];
+		int INF = 999999999;
 
-		for(int i=1;i<=n;i++){
-			for(int j=0;j<=w;j++){
-				if(j==0)				dp[i][j] = 0;
-				else if(cost[i]==-1)	dp[i][j] = val(i-1,j);
-				else 					dp[i][j] = min(cost[i] + val(i,j-i), val(i-1,j) );
-
-				//cout<<dp[i][j]<<" ";
-			}
-			//cout<<endl;
-		}
-
-		if(dp[n][w] == bigNum)
-			cout<<"-1"<<endl;
-		else
-			cout<<dp[n][w]<<endl;
+	    // val[] and wt[] arrays 
+	    // val[] array to store cost of 'i' kg packet of orange 
+	    // wt[] array weight of packet of orange 
+	    vector<int> val, wt; 
+	  
+	    // traverse the original cost[] array and skip 
+	    // unavailable packets and make val[] and wt[] 
+	    // array. size variable tells the available number 
+	    // of distinct weighted packets 
+	    int size = 0; 
+	    for (int i=0; i<N; i++) 
+	    { 
+	        if (cost[i]!= -1) 
+	        { 
+	            val.push_back(cost[i]); 
+	            wt.push_back(i+1); 
+	            size++; 
+	        } 
+	    } 
+	  
+	    N = size; 
+	    int min_cost[N+1][W+1]; 
+	  
+	    // fill 0th row with infinity 
+	    for (int i=0; i<=W; i++) 
+	        min_cost[0][i] = INF; 
+	  
+	    // fill 0'th column with 0 
+	    for (int i=1; i<=N; i++) 
+	        min_cost[i][0] = 0; 
+	  
+	    // now check for each weight one by one and fill the 
+	    // matrix according to the condition 
+	    for (int i=1; i<=N; i++) 
+	    { 
+	        for (int j=1; j<=W; j++) 
+	        { 
+	            // wt[i-1]>j means capacity of bag is 
+	            // less then weight of item 
+	            if (wt[i-1] > j) 
+	                min_cost[i][j] = min_cost[i-1][j]; 
+	  
+	            // here we check we get minimum cost either 
+	            // by including it or excluding it 
+	            else
+	                min_cost[i][j] = min(min_cost[i-1][j], 
+	                     min_cost[i][j-wt[i-1]] + val[i-1]); 
+	        } 
+	    } 
+	  
+	    // exactly weight W can not be made by given weights 
+	    return (min_cost[N][W]==INF)? -1: min_cost[N][W]; 
 	}
-	return 0;
-}
+};
+
+
+
+// { Driver Code Starts.
+int main() 
+{
+   	
+   
+   	int t;
+    cin >> t;
+    while (t--)
+    {
+        int n, w;
+        cin >> n >> w;
+
+        int a[n];
+
+        for(int i = 0; i < n; i++)
+        	cin >> a[i];
+
+       
+
+	    Solution ob;
+	    cout << ob.minimumCost(a, n, w) << "\n";
+	     
+    }
+    return 0;
+}  // } Driver Code Ends
