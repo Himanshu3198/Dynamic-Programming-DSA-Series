@@ -25,3 +25,18 @@ public:
         return dp[0];
     }
 };
+ 
+              //  method 2
+
+         int curend=0,maxfar=0,count=0;
+        
+        for(int i=0;i<nums.size()-1;i++){
+            
+            
+            maxfar=max(maxfar,i+nums[i]);
+            if(i==curend){
+                count++;
+                curend=maxfar;
+            }
+        }
+        return count;
