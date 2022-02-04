@@ -1,5 +1,44 @@
 #include<bits/stdc++.h>
 using namespace std;
+
+
+// time  and space complexity :O(n*sum)
+//  memoization 
+          int dp[100][10001];
+           int solve(int n,int arr[],int sum,int idx){
+              
+              
+               if(sum==0){
+                  
+                  return dp[idx][sum]=1;
+              }
+              
+              if(idx>=n){
+                  return 0;
+              }
+              
+             
+               if(dp[idx][sum]!=-1){
+                  return dp[idx][sum];
+              }
+              
+              
+              if(arr[idx]>sum){
+                  return dp[idx][sum]=solve(n,arr,sum,idx+1);
+              }
+              
+              return dp[idx][sum]= (solve(n,arr,sum,idx+1) || solve(n,arr,sum-arr[idx],idx+1));
+          }
+    bool isSubsetSum(int N, int arr[], int sum){
+     
+     
+           // code here 
+           memset(dp,-1,sizeof(dp));
+           return solve(N,arr,sum,0);
+    }
+
+
+//  tabulation 
    bool SubsetSum(int set[],int n,int sum){
    	bool subset[n+1][sum+1];
    	for(int i=0;i<=n;i++)
