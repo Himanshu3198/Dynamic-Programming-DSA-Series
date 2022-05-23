@@ -1,61 +1,41 @@
 //    memoization
 class Solution {
 public:
-         int dp[102][102][602];
-       vector<int> count(string s){
-           
-           vector<int>freq(2,0);
-           
-           for(auto it:s){
-               
-               freq[it-'0']++;
-           }
-           
-           return freq;
-           
-           
-       }
+      static const auto _____ = []()
+{
+    // fast IO code : this I understand
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    return 0;
+}();
+class Solution {
+public:
     
+    vector<int>freq(string &s){
+          vector<int>v(2,0);
+          for(auto &it:s) v[it-'0']++;
+          return v;
+    }
+    int solve(vector<string>& s,int zeros,int ones,int idx,vector<vector<vector<int>>>&dp){
+        
+         if(idx>=s.size() || (zeros+ones==0)) return 0;
+         if(dp[idx][zeros][ones]!=-1) return dp[idx][zeros][ones];
+         vector<int>count=freq(s[idx]);
+         int pick=0,notPick=0;
+         if(zeros>=count[0] && ones>=count[1]){
+             pick=1+solve(s,zeros-count[0],ones-count[1],idx+1,dp);   
+         }
+         notPick=solve(s,zeros,ones,idx+1,dp);
+         return dp[idx][zeros][ones]=max(pick,notPick);
+
+    }
     
-        int helper(vector<string>&s,int zeros,int ones,int idx){
-            
-            if(idx==s.size() or zeros+ones==0){
-                return 0;
-            }
-            
-           if( dp[zeros][ones][idx]!=-1){
-               
-               return dp[zeros][ones][idx];
-           }
-            vector<int>freq=count(s[idx]);
-            
-              int pick=0;
-            if(zeros>=freq[0] and ones>=freq[1]){
-                
-                pick=1+helper(s,zeros-freq[0],ones-freq[1],idx+1);
-                
-            }
-            
-            int notpick=helper(s,zeros,ones,idx+1);
-            
-         return   dp[zeros][ones][idx]=max(pick,notpick);
-            
-            
-        }
-        
-       
-    int findMaxForm(vector<string>& s, int m, int n) {
-        
-                 int size=s.size();
-                  
-        
-              memset(dp,-1,sizeof(dp));
-        
-           return helper(s,m,n,0);
-         
+    int findMaxForm(vector<string>& strs, int m, int n) {
+     
+           vector<vector<vector<int>>>dp(strs.size(),vector<vector<int>>(m+1,vector<int>(n+1,-1)));
+           return solve(strs,m,n,0,dp);
     }
 };
-
 
 
 //  tabular dp
