@@ -1,58 +1,47 @@
 class Solution {
 public:
-       int dp[1001];
-    bool static comp(string s1,string s2){
-        
-        return s1.length()<s2.length();
-    }
     
+    int dp[1001];
     bool isValid(string &s,string &t){
+          int x=s.size(),y=t.size();
+        if((y-x)>1 || x==y ) return false;
         
-        if(t.size()-s.size()>1 or t.size()==s.size()) return false;
-        int n=t.size();
         for(int i=0;i<t.size();i++){
             
-            string temp=t.substr(0,i)+t.substr(i+1,n-i-1);
-            
+            string temp=t.substr(0,i)+t.substr(i+1,y-i-1);
             if(temp==s) return true;
         }
         return false;
     }
-    
-    int helper(int idx,vector<string>&words){
+    int solve(vector<string>&words,int idx){
         
+         if(idx>=words.size()) return 0;
         if(dp[idx]!=-1) return dp[idx];
-        int n=words.size();
-        int ans=1;
-        for(int i=idx+1;i<n;i++){
+       
+        
+        int cnt=1;
+        for(int i=idx+1;i<words.size();i++){
             
             if(isValid(words[idx],words[i])){
-                
-                ans=max(ans,1+helper(i,words));
-                
+                cnt=max(cnt,1+solve(words,i));
             }
         }
-        return dp[idx]=ans;
+        return dp[idx]=cnt;
     }
-    
-    
     int longestStrChain(vector<string>& words) {
         
-         memset(dp,-1,sizeof(dp));
-        sort(words.begin(),words.end(),comp);
+        sort(words.begin(),words.end(),[&](string a,string b){
+            return a.size()<b.size();
+        });
+        memset(dp,-1,sizeof(dp));
+        int maxRes=1;
+        for(int i=0;i<words.size();i++){
+            
+            maxRes=max(maxRes,solve(words,i));
+        }
+        return maxRes;
         
-        // for(auto it:words) cout<<it<<" ";
-          int resmax=1;
         
-    
-           int n=words.size();
-         for(int i=0;i<n;i++){
-             
-          
-             
-             resmax=max(resmax,helper(i,words));
-         }
-        // for(int i=0;i<n;i++)cout<<dp[i]<<" ";
-        return resmax;
+        
     }
 };
