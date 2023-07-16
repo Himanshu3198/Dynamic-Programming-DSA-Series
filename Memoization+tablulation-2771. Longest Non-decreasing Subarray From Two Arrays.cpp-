@@ -1,0 +1,48 @@
+class Solution {
+public:
+
+   long long Max(long long a,long long b){
+       if(a>b) return a;
+       return b;
+   }
+    int dp[100001][3];
+    int solve(vector<int>&nums1,vector<int>&nums2,int idx,int choice){
+        
+        if(idx==nums1.size()) return 0;
+        // if(prev<num) return 0;
+    
+        if(dp[idx][choice]!=-1) return dp[idx][choice];
+       long long  ans=0;
+       if(choice==0){
+         ans=Max(ans,solve(nums1,nums2,idx+1,0));
+         ans=Max(ans,1+solve(nums1,nums2,idx+1,1));
+         ans=Max(ans,1+solve(nums1,nums2,idx+1,2));
+         
+       }
+       else if(choice==1){
+           if(nums1[idx]>=nums1[idx-1]){
+               ans=Max(ans,1+solve(nums1,nums2,idx+1,1));
+               
+           }
+           if(nums2[idx]>=nums1[idx-1]){
+               ans=Max(ans,1+solve(nums1,nums2,idx+1,2));
+           }
+    
+       }
+       else if(choice==2){
+           if(nums1[idx]>=nums2[idx-1]){
+                 ans=Max(ans,1+solve(nums1,nums2,idx+1,1));
+                 
+           }
+           if(nums2[idx]>=nums2[idx-1]){
+                ans=Max(ans,1+solve(nums1,nums2,idx+1,2));
+           }
+       }
+       return dp[idx][choice]=ans;
+        
+    }
+    int maxNonDecreasingLength(vector<int>& nums1, vector<int>& nums2) {
+       memset(dp,-1,sizeof(dp));
+        return solve(nums1,nums2,0,0);
+    }
+};
