@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int dp[301][301];
+    int mod=1e9+7;
+    int solve(vector<int>&coins,int amount,int idx){
+        if(amount==0) return 1;
+        if((idx==coins.size() && amount!=0) || amount<0) return 0;
+        if(dp[idx][amount]!=-1) return dp[idx][amount];
+        int ans=0;
+        int pick=0;
+        if(amount>=coins[idx])
+            pick=solve(coins,amount-coins[idx],idx+1);
+        int notPick=solve(coins,amount,idx+1);
+        ans=(pick+notPick)%mod;
+        return dp[idx][amount]=ans;
+        
+    }
+    int numberOfWays(int n, int x) {
+        memset(dp,-1,sizeof(dp));
+        vector<int>coins;
+        for(int i=1;i<=n;i++){
+            int curr=pow(i,x);
+            if(curr<=n) coins.push_back(curr);
+            else break;
+        }
+        // for(auto it:coins) cout<<it<<" ";
+        // cout<<"\n";
+        return solve(coins,n,0);
+    }
+};
