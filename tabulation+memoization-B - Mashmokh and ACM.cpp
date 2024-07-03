@@ -88,9 +88,11 @@ void solve()
         
         for(int i=1;i<=n;i++){
             
+            ll count=0;
             for(auto &child:multiples[i]){
-                dp[size][i]=(dp[size][i]+dp[size-1][child])%mod;
+                count=(count+dp[size-1][child])%mod;
             }
+            dp[size][i]=count;
     
         }
     }
